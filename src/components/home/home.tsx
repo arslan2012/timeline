@@ -96,11 +96,25 @@ export class Home extends React.Component<{}, never> {
       this.scene.add(mesh)
     })
 
-    document.addEventListener(
+    this.canvas.addEventListener(
       'mousemove',
       (event) => {
         this.mouseX = (event.clientX - this.windowHalfX) * 4
         this.mouseY = (event.clientY - this.windowHalfY) * 4
+      },
+      false
+    )
+
+    this.canvas.addEventListener(
+      'touchmove',
+      (event) => {
+        const touches = event.changedTouches
+
+        for (let i = 0; i < touches.length; i++) {
+          const touch = touches[i]
+          this.mouseX = (touch.pageX - this.windowHalfX) * 4
+          this.mouseY = (touch.pageY - this.windowHalfY) * 4
+        }
       },
       false
     )
