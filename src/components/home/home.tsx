@@ -108,6 +108,7 @@ export class Home extends React.Component<{}, never> {
     this.canvas.addEventListener(
       'touchmove',
       (event) => {
+        event.preventDefault() // stop chrome from refreshing
         const touches = event.changedTouches
 
         for (let i = 0; i < touches.length; i++) {
