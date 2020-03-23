@@ -5,7 +5,7 @@
     "strict": true,
     "jsx": "react",
     "rootDir": "./src",
-    "incremental": true,
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
     "lib": ["dom", "es2015"]
   }

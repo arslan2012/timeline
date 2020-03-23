@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { render } from 'react-dom'
-import './index.css'
+import { Home } from './components/home/home'
 
-import { App } from './components/App'
-
-render(<App />, document.getElementById('root'))
+render(<Home />, document.getElementById('root'))
