@@ -1,33 +1,36 @@
 import * as React from 'react'
 import {
-  BufferGeometry,
-  Color,
-  DoubleSide,
-  FontLoader,
-  Line,
-  LineBasicMaterial,
+  AmbientLight,
+  CubeRefractionMapping,
+  CubeTextureLoader,
   Mesh,
   MeshBasicMaterial,
-  Object3D,
-  Path,
+  MeshPhongMaterial,
   PerspectiveCamera,
+  PointLight,
   Scene,
-  ShapeBufferGeometry,
+  SphereBufferGeometry,
+  Vector3,
   WebGLRenderer,
 } from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import * as TypefaceJson from '../../fonts/helvetiker_regular.typeface.json'
+import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'
 
 export class Home extends React.Component<{}, never> {
   camera = new PerspectiveCamera(
-    45,
+    50,
     window.innerWidth / window.innerHeight,
     1,
-    10000
+    100000
   )
   scene = new Scene()
   renderer = new WebGLRenderer({ antialias: true })
   canvas: HTMLDivElement | null | undefined
+  pointLight = new PointLight(0xffffff, 2)
+  mouseX = 0
+  mouseY = 0
+
+  windowHalfX = window.innerWidth / 2
+  windowHalfY = window.innerHeight / 2
 
   componentDidMount() {
     document.title = 'Timeline'
@@ -36,77 +39,81 @@ export class Home extends React.Component<{}, never> {
   }
 
   init() {
-    this.camera.position.set(0, -400, 600)
-    this.scene.background = new Color(0xf0f0f0)
-    const font = new FontLoader().parse(TypefaceJson)
-    const color = 0x006699
+    if (!this.canvas) return
+    this.camera.position.z = -4000
 
-    const matDark = new LineBasicMaterial({
-      color,
-      side: DoubleSide,
+    const urls = [
+      'static/img/px.jpg',
+      'static/img/nx.jpg',
+      'static/img/py.jpg',
+      'static/img/ny.jpg',
+      'static/img/pz.jpg',
+      'static/img/nz.jpg',
+    ]
+
+    const textureCube = new CubeTextureLoader().load(urls)
+    textureCube.mapping = CubeRefractionMapping
+
+    this.scene.background = textureCube
+
+    // LIGHTS
+
+    const ambient = new AmbientLight(0xffffff)
+    this.scene.add(ambient)
+
+    this.scene.add(this.pointLight)
+
+    // light representation
+
+    const sphere = new SphereBufferGeometry(100, 16, 8)
+
+    const mesh = new Mesh(sphere, new MeshBasicMaterial({ color: 0xffffff }))
+    mesh.scale.set(0.05, 0.05, 0.05)
+    this.pointLight.add(mesh)
+
+    // material samples
+
+    const cubeMaterial = new MeshPhongMaterial({
+      color: 0xccddff,
+      envMap: textureCube,
+      refractionRatio: 0.98,
+      reflectivity: 0.9,
     })
-
-    const matLite = new MeshBasicMaterial({
-      color,
-      transparent: true,
-      opacity: 0.4,
-      side: DoubleSide,
-    })
-
-    const message = '   Welcome to \narslan2012.tech'
-
-    const shapes = font.generateShapes(message, 100)
-
-    const geometry = new ShapeBufferGeometry(shapes)
-
-    geometry.computeBoundingBox()
-
-    const xMid =
-      -0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
-
-    geometry.translate(xMid, 0, 0)
-
-    // make shape ( N.B. edge view not visible )
-
-    const text = new Mesh(geometry, matLite)
-    text.position.z = -150
-    this.scene.add(text)
-
-    // make line shape ( N.B. edge view remains visible )
-    const holeShapes: Path[] = []
-    for (const shape of shapes) {
-      if (shape.holes && shape.holes.length > 0) {
-        holeShapes.push(...shape.holes)
-      }
-    }
-
-    // @ts-ignore
-    shapes.push(...holeShapes)
-
-    const lineText = new Object3D()
-
-    for (const shape of shapes) {
-      const points = shape.getPoints()
-      const geometry = new BufferGeometry().setFromPoints(points)
-      geometry.translate(xMid, 0, 0)
-      const lineMesh = new Line(geometry, matDark)
-      lineText.add(lineMesh)
-    }
-    this.scene.add(lineText)
 
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.canvas && this.canvas.appendChild(this.renderer.domElement)
+    this.canvas.appendChild(this.renderer.domElement)
 
-    const controls = new OrbitControls(this.camera, this.renderer.domElement)
-    controls.target.set(0, 0, 0)
-    controls.update()
+    const loader = new PLYLoader()
+    loader.load('static/arslan.ply', (geometry) => {
+      geometry.computeVertexNormals()
+
+      const mesh = new Mesh(geometry, cubeMaterial)
+      mesh.position.x = 1100
+      mesh.scale.x = mesh.scale.y = mesh.scale.z = 1500
+      mesh.rotateOnAxis(new Vector3(1, 0, 0), 4.5)
+      mesh.rotateOnAxis(new Vector3(0, 0, 1), 3.5)
+      this.scene.add(mesh)
+    })
+
+    document.addEventListener(
+      'mousemove',
+      (event) => {
+        this.mouseX = (event.clientX - this.windowHalfX) * 4
+        this.mouseY = (event.clientY - this.windowHalfY) * 4
+      },
+      false
+    )
 
     window.addEventListener(
       'resize',
       () => {
+        this.windowHalfX = window.innerWidth / 2
+        this.windowHalfY = window.innerHeight / 2
+
         this.camera.aspect = window.innerWidth / window.innerHeight
         this.camera.updateProjectionMatrix()
+
         this.renderer.setSize(window.innerWidth, window.innerHeight)
       },
       false
@@ -115,10 +122,22 @@ export class Home extends React.Component<{}, never> {
 
   animate() {
     requestAnimationFrame(this.animate.bind(this))
+    const timer = -0.0002 * Date.now()
+
+    this.camera.position.x += (this.mouseX - this.camera.position.x) * 0.05
+    this.camera.position.y += (-this.mouseY - this.camera.position.y) * 0.05
+
+    this.camera.lookAt(this.scene.position)
+
+    this.pointLight.position.x = 1500 * Math.cos(timer)
+    this.pointLight.position.z = 1500 * Math.sin(timer)
+
     this.renderer.render(this.scene, this.camera)
   }
 
   render() {
-    return <div ref={(ref) => (this.canvas = ref)} />
+    return (
+      <div ref={(ref) => (this.canvas = ref)} style={{ display: 'flex' }} />
+    )
   }
 }
