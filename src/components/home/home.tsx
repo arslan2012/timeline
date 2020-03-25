@@ -14,7 +14,9 @@ import {
   WebGLRenderer,
 } from 'three'
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'
+import autobind from '../../util/autobound.decorator'
 
+@autobind
 export class Home extends React.Component<{}, never> {
   camera = new PerspectiveCamera(
     50,
@@ -34,11 +36,11 @@ export class Home extends React.Component<{}, never> {
 
   componentDidMount() {
     document.title = 'Timeline'
-    this.init()
-    this.animate()
+    this.initCanvas()
+    this.animateCanvas()
   }
 
-  init() {
+  initCanvas() {
     if (!this.canvas) return
     this.camera.position.z = -4000
 
@@ -96,47 +98,37 @@ export class Home extends React.Component<{}, never> {
       this.scene.add(mesh)
     })
 
-    this.canvas.addEventListener(
-      'mousemove',
-      (event) => {
-        this.mouseX = (event.clientX - this.windowHalfX) * 4
-        this.mouseY = (event.clientY - this.windowHalfY) * 4
-      },
-      false
-    )
-
-    this.canvas.addEventListener(
-      'touchmove',
-      (event) => {
-        event.preventDefault() // stop chrome from refreshing
-        const touches = event.changedTouches
-
-        for (let i = 0; i < touches.length; i++) {
-          const touch = touches[i]
-          this.mouseX = (touch.pageX - this.windowHalfX) * 4
-          this.mouseY = (touch.pageY - this.windowHalfY) * 4
-        }
-      },
-      false
-    )
-
-    window.addEventListener(
-      'resize',
-      () => {
-        this.windowHalfX = window.innerWidth / 2
-        this.windowHalfY = window.innerHeight / 2
-
-        this.camera.aspect = window.innerWidth / window.innerHeight
-        this.camera.updateProjectionMatrix()
-
-        this.renderer.setSize(window.innerWidth, window.innerHeight)
-      },
-      false
-    )
+    window.addEventListener('resize', this.rerenderCanvas, false)
   }
 
-  animate() {
-    requestAnimationFrame(this.animate.bind(this))
+  rerenderCanvas() {
+    this.windowHalfX = window.innerWidth / 2
+    this.windowHalfY = window.innerHeight / 2
+
+    this.camera.aspect = window.innerWidth / window.innerHeight
+    this.camera.updateProjectionMatrix()
+
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
+  }
+
+  canvasOnMouseMove(event) {
+    this.mouseX = (event.clientX - this.windowHalfX) * 4
+    this.mouseY = (event.clientY - this.windowHalfY) * 4
+  }
+
+  canvasOnTouchMove(event) {
+    event.preventDefault() // stop chrome from refreshing
+    const touches = event.changedTouches
+
+    for (let i = 0; i < touches.length; i++) {
+      const touch = touches[i]
+      this.mouseX = (touch.pageX - this.windowHalfX) * 4
+      this.mouseY = (touch.pageY - this.windowHalfY) * 4
+    }
+  }
+
+  animateCanvas() {
+    requestAnimationFrame(this.animateCanvas)
     const timer = -0.0002 * Date.now()
 
     this.camera.position.x += (this.mouseX - this.camera.position.x) * 0.05
@@ -152,7 +144,16 @@ export class Home extends React.Component<{}, never> {
 
   render() {
     return (
-      <div ref={(ref) => (this.canvas = ref)} style={{ display: 'flex' }} />
+      <div
+        ref={(ref) => (this.canvas = ref)}
+        style={{ display: 'flex' }}
+        onMouseMove={this.canvasOnMouseMove}
+        onTouchMove={this.canvasOnTouchMove}
+      />
     )
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.rerenderCanvas, false)
   }
 }
