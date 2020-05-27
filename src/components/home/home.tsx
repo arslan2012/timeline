@@ -15,9 +15,11 @@ import {
 } from 'three'
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'
 import autobind from '../../util/autobound.decorator'
+import styles from './home.module.scss'
+import { Link } from 'react-router-dom'
 
 @autobind
-export class Home extends React.Component<{}, never> {
+export default class Home extends React.Component<{}, never> {
   camera = new PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
@@ -144,12 +146,25 @@ export class Home extends React.Component<{}, never> {
 
   render() {
     return (
-      <div
-        ref={(ref) => (this.canvas = ref)}
-        style={{ display: 'flex' }}
-        onMouseMove={this.canvasOnMouseMove}
-        onTouchMove={this.canvasOnTouchMove}
-      />
+      <div>
+        <div className={styles.navbar}>
+          <div className={styles.navItem}>
+            <Link to="/">Home</Link>
+          </div>
+          <div className={styles.navItem}>
+            <Link to="/blog">Blog</Link>
+          </div>
+          <div className={styles.navItem}>
+            <Link to="/about-me">About me</Link>
+          </div>
+        </div>
+        <div
+          ref={(ref) => (this.canvas = ref)}
+          style={{ display: 'flex' }}
+          onMouseMove={this.canvasOnMouseMove}
+          onTouchMove={this.canvasOnTouchMove}
+        />
+      </div>
     )
   }
 

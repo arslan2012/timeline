@@ -6,6 +6,7 @@
     "jsx": "react",
     "rootDir": "./src",
     "resolveJsonModule": true,
+    "esModuleInterop":true,
     "experimentalDecorators": true,
     "lib": ["dom", "es2015"]
   }
