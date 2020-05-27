@@ -1,12 +1,12 @@
 {
-  "name": "ts-react-parcel",
+  "name": "arslan2012.tech",
   "version": "2.0.0",
-  "description": "Typescript with React, using parcel bundler",
+  "description": "arslan2012.tech",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adhrinae/ts-react-parcel"
+    "url": "https://github.com/arslan2012/timeline"
   },
-  "author": "Ahn Dohyung",
+  "author": "Arslan Ablikim",
   "license": "MIT",
   "main": "src/index.tsx",
   "scripts": {

@@ -15,6 +15,7 @@ import {
 } from 'three'
 import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'
 import autobind from '../../util/autobound.decorator'
+// @ts-ignore
 import styles from './home.module.scss'
 import { Link } from 'react-router-dom'
 
