@@ -1,0 +1,13 @@
+.aboutMe_tabNav {
+  background-color: #27223e;
+  .nav-link {
+    color: wheat;
+    &.active {
+      background-color: wheat;
+      border-color: wheat;
+    }
+    &:hover {
+      border-color: wheat;
+    }
+  }
+}

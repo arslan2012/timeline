@@ -1,6 +1,11 @@
 import * as React from "react";
 import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
+import styles from "./aboutMe.module.scss";
+import "./abountMe.override.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 export default class AboutMe extends React.Component {
   componentDidMount() {
@@ -8,18 +13,34 @@ export default class AboutMe extends React.Component {
   }
   render() {
     return (
-      <div>
-        <p>阿尔斯兰&middot;阿布力克木</p>
-        <p>Arslan Ablikim</p>
-        <p>
-          <a href="mailto:arslan.ablikim0@gmail.com ">email</a>
-          <a href="https://www.linkedin.com/in/arslan-ablikim/?locale=zh_cn">
-            LinkedIn
-          </a>
-          <a href="https://github.com/arslan2012">Github</a>
-        </p>
-        <Tabs id="mainTab">
-          <Tab eventKey="about" title="about me">
+      <div className={styles.root}>
+        <div className={styles.bannerDiv}>
+          <img className={styles.logo} src={"/img/logo.webp"} alt="" />
+          <p>阿尔斯兰&middot;阿布力克木</p>
+          <p>Arslan Ablikim</p>
+          <p>
+            <a
+              className={styles.iconWithLink}
+              href="mailto:arslan.ablikim0@gmail.com "
+            >
+              <FontAwesomeIcon icon={faEnvelope} />
+            </a>
+            <a
+              className={styles.iconWithLink}
+              href="https://www.linkedin.com/in/arslan-ablikim/?locale=zh_cn"
+            >
+              <FontAwesomeIcon icon={faLinkedin} />
+            </a>
+            <a
+              className={styles.iconWithLink}
+              href="https://github.com/arslan2012"
+            >
+              <FontAwesomeIcon icon={faGithub} />
+            </a>
+          </p>
+        </div>
+        <Tabs id="mainTab" className="justify-content-center aboutMe_tabNav">
+          <Tab eventKey="about" title="About Me" className={styles.tabContent}>
             <p>Education</p>
             <p>Beijing University of Posts and Telecommunications</p>
             <p>Computer Science bachelor&rsquo;s degree</p>
@@ -34,7 +55,11 @@ export default class AboutMe extends React.Component {
             </p>
             <p>webpack, parcel, linux, docker, bash;</p>
           </Tab>
-          <Tab eventKey="pro" title="Professional Experience">
+          <Tab
+            eventKey="pro"
+            title="Professional Experience"
+            className={styles.tabContent}
+          >
             <p>Sep 2013 - Jul 2017</p>
             <p>Bisaibang. LLC</p>
             <p>Aug 2016 present</p>
@@ -84,7 +109,11 @@ export default class AboutMe extends React.Component {
               sending the changes through IPC .
             </p>
           </Tab>
-          <Tab eventKey="open" title="Opensource Experience">
+          <Tab
+            eventKey="open"
+            title="Opensource Experience"
+            className={styles.tabContent}
+          >
             <p>lazy Hackintosh image generator</p>
             <p>Feb 2016 - present</p>
             <p>
