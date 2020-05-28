@@ -1,53 +1,60 @@
 {
-  "name": "arslan2012.tech",
-  "version": "2.0.0",
-  "description": "arslan2012.tech",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/arslan2012/timeline"
-  },
-  "author": "Arslan Ablikim",
-  "license": "MIT",
-  "main": "src/index.tsx",
-  "scripts": {
-    "develop": "concurrently -r \"npm:type-check:watch\" \"npm:start\"",
-    "start": "parcel ./src/index.html",
-    "build": "npm run type-check && parcel build ./src/index.html --public-url '/'",
-    "prettify": "prettier --write './src/**/*.{ts,tsx}'",
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "tsc --noEmit --watch"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run prettify"
+    "name": "arslan2012.tech",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "bootstrap": "^4.5.0",
+        "react": "^16.13.1",
+        "react-bootstrap": "^1.0.1",
+        "react-dom": "^16.13.1",
+        "react-router-dom": "^5.2.0",
+        "three": "^0.117.0"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.3.2",
+        "@testing-library/user-event": "^7.1.2",
+        "@types/jest": "^24.0.0",
+        "@types/node": "^12.0.0",
+        "@types/react": "^16.9.0",
+        "@types/react-dom": "^16.9.0",
+        "@types/react-router-dom": "^5.1.5",
+        "husky": "^4.2.5",
+        "lint-staged": "^10.2.6",
+        "node-sass": "^4.14.1",
+        "prettier": "^2.0.5",
+        "react-scripts": "3.4.1",
+        "typescript": "~3.7.2"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+            "prettier --write"
+        ]
     }
-  },
-  "keywords": [
-    "Typescript",
-    "React",
-    "Parcel"
-  ],
-  "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "^13.9.3",
-    "@types/react": "^16.8.14",
-    "@types/react-dom": "^16.8.4",
-    "@types/react-router-dom": "^5.1.5",
-    "concurrently": "^5.1.0",
-    "husky": "^4.2.3",
-    "parcel-bundler": "^1.12.3",
-    "postcss-modules": "^2.0.0",
-    "prettier": "^2.0.1",
-    "sass": "^1.26.3",
-    "three": "^0.114.0",
-    "tslint": "^6.1.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-react": "^4.0.0",
-    "typescript": "^3.4.4"
-  }
 }

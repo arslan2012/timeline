@@ -13,12 +13,11 @@ jobs:
       run: |
           yarn
           yarn build
-          cp -r src/static dist/
     - name: rsync deployments
       uses: burnett01/rsync-deployments@4.0
       with:
         switches: -az --delete
-        path: dist/
+        path: build/
         remote_path: /usr/local/caddy/www/file/
         remote_host: arslan2012.tech
         remote_user: root
