@@ -20,6 +20,19 @@ body {
   }
 }
 
+.aboutMe {
+  display: flex;
+  padding: 50px 10rem 0 10rem;
+  .img {
+    flex: 0 0 300px;
+    width: 300px;
+    height: 400px;
+  }
+  .text {
+    margin-left: 30px;
+  }
+}
+
 .iconWithLink {
   padding: 20px;
   color: wheat;
