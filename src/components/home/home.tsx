@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {
   AmbientLight,
   CubeRefractionMapping,
@@ -15,8 +15,6 @@ import {
 } from "three";
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader";
 import autobind from "../../util/autobound.decorator";
-import styles from "./home.module.scss";
-import { Link } from "react-router-dom";
 
 @autobind
 export default class Home extends React.Component<{}, never> {
@@ -146,25 +144,12 @@ export default class Home extends React.Component<{}, never> {
 
   render() {
     return (
-      <div>
-        <div className={styles.navbar}>
-          <div className={styles.navItem}>
-            <Link to="/">Home</Link>
-          </div>
-          <div className={styles.navItem}>
-            <Link to="/blog">Blog</Link>
-          </div>
-          <div className={styles.navItem}>
-            <Link to="/about-me">About me</Link>
-          </div>
-        </div>
-        <div
-          ref={(ref) => (this.canvas = ref)}
-          style={{ display: "flex" }}
-          onMouseMove={this.canvasOnMouseMove}
-          onTouchMove={this.canvasOnTouchMove}
-        />
-      </div>
+      <div
+        ref={(ref) => (this.canvas = ref)}
+        style={{ display: "flex" }}
+        onMouseMove={this.canvasOnMouseMove}
+        onTouchMove={this.canvasOnTouchMove}
+      />
     );
   }
 

@@ -1,0 +1,23 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  right: 0;
+}
+
+.navItem {
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  mask: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(white),
+    to(rgba(255, 255, 255, 0))
+  );
+  margin-right: 5px;
+  text-align: center;
+  font-size: 1.3rem;
+}
